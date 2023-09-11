@@ -1,8 +1,10 @@
 import random
 import re
 import string
+from typing import Optional
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Form
+from pydantic import BaseModel
 from starlette.responses import RedirectResponse
 
 app = FastAPI(
@@ -35,19 +37,24 @@ async def root():
     }
 
 
+class ShortenRequest(BaseModel):
+    long_url: str
+    alias: Optional[str] = None
+
+
 @app.post("/shorten")
-async def shorten(request: Request, long_url: str, alias: str = None):
-    if not re.match(url_regex, long_url):
+async def shorten(request: Request, data: ShortenRequest):
+    if not re.match(url_regex, data.long_url):
         raise HTTPException(status_code=400, detail="Invalid URL.")
 
-    if alias and alias in urls:
+    if data.alias and data.alias in urls:
         raise HTTPException(status_code=400, detail="This URL alias is already taken.")
 
-    alias = alias if alias else generate_unique_alias()
-    urls[alias] = long_url
+    alias = data.alias if data.alias else generate_unique_alias()
+    urls[alias] = data.long_url
 
     return {
-        "long_url": long_url,
+        "long_url": data.long_url,
         "shortened_url": f"{request.base_url}{alias}",
     }
 
