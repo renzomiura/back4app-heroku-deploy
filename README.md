@@ -4,18 +4,10 @@ This repository demonstrates how to deploy a [FastAPI](https://fastapi.tiangolo.
 
 To learn more check out the [article](#).
 
-## Deploy (Docker)
+## Repository structure
 
-1. Install Docker (if you don't have it yet).
+The repository is split into three branches:
 
-2. Build and tag the image:
-    ```sh
-    $ docker build -t back4app-url-shortener:1.0 .
-    ```
-
-3. Start a new container:
-   ```sh
-    $ docker run -p 80:80 --name back4app-url-shortener back4app-url-shortener:1.0
-    ```
-
-4. Navigate to [http://localhost/docs](http://localhost/docs) in your favorite web browser.
+- `master` starting point
+- `heroku-final` project prepared for Heroku
+- `back4app-final` project prepared for Back4app
